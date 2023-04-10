@@ -11,3 +11,4 @@ window_size = 31
 filtered_walk = walking_train.rolling(window_size, center=True).mean()
 filtered_jump = jumping_train.rolling(window_size, center=True).mean()
 
+
