@@ -116,8 +116,24 @@ with h5py.File('./data.h5', 'w') as hdf:
 # Combine Both Datasets & Shuffle
 raw_df = [walk_df, jump_df]
 raw_data = pd.concat(raw_df)
-# HOW DO I SHUFFLE LOL
+# HOW DO I SHUFFLE LOL--------------------------------------------------------------------------
 shuffled_data = raw_data
+
+# group the dataframe into groups of 100 rows each
+groups = raw_data.groupby(raw_data.index // 2000)
+
+# shuffle the rows within each group using the sample() method
+shuffled_df = groups.apply(lambda x: x.sample(frac=1)).reset_index(drop=True)
+
+# display the shuffled dataframe
+print(walk_df)
+print(jump_df)
+print(raw_df)
+print(raw_data)
+print(shuffled_df)
+print("MEOW")
+print(raw_data)
+#---------------------------------------------------------------------------------------------------------------
 
 # Split data into training and testing sets, with 90% of the data used for training and 10% used for testing
 train_data, test_data = train_test_split(shuffled_data, test_size=0.1, random_state=42)
