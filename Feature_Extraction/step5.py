@@ -1,38 +1,36 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import h5py
 from sklearn import preprocessing
 
-#INPUT DATA USING HDF5 (maybe use different sets?)
-trained_data = pd.read_csv('input_data\trained.csv')
 
+# #INPUT DATA USING HDF5 (maybe use different sets?)
+# with h5py.File('input_data/data.h5', 'r') as hdf:
+#     trained_data = hdf['/dataset/training/Train_Data']
+#     print(trained_data)
+#     print("MEOW MEOW MEOW\n\n\n\n\n\n\n")
+    
+
+trained_data = pd.read_csv('train.csv')
+print(trained_data)
 #HAVE A PREDETERMINED WINDOW SIZE
 window_size = 31
 
-#PERFORM FEATURE EXTRACTION ON WALK
-mean_train = pd.Series(trained_data).rolling(window_size).mean()
-std_train = pd.Series(trained_data).rolling(window_size).std()
-max_train = pd.Series(trained_data).rolling(window_size).max()
-min_train = pd.Series(trained_data).rolling(window_size).min()
-median_train = pd.Series(trained_data).rolling(window_size).median()
-var_train = pd.Series(trained_data).rolling(window_size).var()
-corr_train = pd.Series(trained_data).rolling(window_size).corr()
-cov_train = pd.Series(trained_data).rolling(window_size).cov()
-skew_train = pd.Series(trained_data).rolling(window_size).skew()
+# Compute the statistical features for each group
+features = trained_data.agg(['min', 'max', 'mean', 'median', 'var', 'skew', 'std'])
 
-#EXTRACT FEATURES FOR WALK AND JUMP
-features = pd.DataFrame({'mean': mean_train,
-                         'std': std_train,
-                         'max': max_train,
-                         'min': min_train,
-                         'median': median_train,
-                         'var': var_train,
-                         'corr': corr_train,
-                         'cov': cov_train,
-                         'skew': skew_train})
+# Flatten the column names to remove the hierarchical index
+features.columns = ['_'.join(col).strip() for col in features.columns.values]
+print(features)
 
-#DROP NAN's PRODUCED BY WINDOW
 features = features.dropna()
 
-#EXPORT BACK TO HDF5
+features.to_csv('train_features.csv', index=False)
 
+# #EXPORT BACK TO HDF5
+# with h5py.File('output_data/data.h5', 'a') as hdf:
+    
+#     group = hdf['/dataset/training']
+#     dataset = group.create_dataset('Features', data=features.to_numpy())
+    

@@ -101,9 +101,11 @@ with h5py.File('./data.h5', 'w') as hdf:
 
     #Add data to Train_Dataset_Group
     train.create_dataset('Train_Data', data=train_data)
+    train_data.to_csv('train.csv', index=False)
 
     # Add data to Test_Dataset_Group
     test.create_dataset('Test_Data', data=test_data)
+    test_data.to_csv('test.csv', index=False)
 
 # Jacob_Data_Group----------------------------------------------------------------------------
     
