@@ -24,31 +24,33 @@ from sklearn.model_selection import train_test_split
 #If there is issue when reading excel file, issue is most likely due to the fact that the excel file is protected
 # create a new copy of file and add new verison
 
+# CREATE A STANDARD FILE READ SIZE
+max_rows = 500*6
 
 # Load the data from the Excel and CSV files:
 # Jacob's Files:
-df_JD1 = pd.read_csv('raw_data/Jacob_jump_back_pocket_data.csv')
-df_JD2 = pd.read_csv('raw_data/Jacob_jump_front_pocket_data.csv')
-df_JD3 = pd.read_csv('raw_data/Jacob_jump_hand_data.csv')
-df_JD4 = pd.read_csv('raw_data/Jacob_walking_back_pocket_data.csv')
-df_JD5 = pd.read_csv('raw_data/Jacob_walking_front_pocket_data.csv')
-df_JD6 = pd.read_csv('raw_data/Jacob_walking_hand_data.csv')
+df_JD1 = pd.read_csv('raw_data/Jacob_jump_back_pocket_data.csv', nrows=max_rows)
+df_JD2 = pd.read_csv('raw_data/Jacob_jump_front_pocket_data.csv', nrows=max_rows)
+df_JD3 = pd.read_csv('raw_data/Jacob_jump_hand_data.csv', nrows=max_rows)
+df_JD4 = pd.read_csv('raw_data/Jacob_walking_back_pocket_data.csv', nrows=max_rows)
+df_JD5 = pd.read_csv('raw_data/Jacob_walking_front_pocket_data.csv', nrows=max_rows)
+df_JD6 = pd.read_csv('raw_data/Jacob_walking_hand_data.csv', nrows=max_rows)
 
 # Omar's Files:
-df_OD1 = pd.read_csv('raw_data/omar_jumping_back_pocket_data.csv')
-df_OD2 = pd.read_csv('raw_data/omar_jumping_front_pocket_data.csv')
-df_OD3 = pd.read_csv('raw_data/omar_jumping_hand_data.csv')
-df_OD4 = pd.read_csv('raw_data/omar_walking_back_pocket_data.csv')
-df_OD5 = pd.read_csv('raw_data/omar_walking_front_pocket_data.csv')
-df_OD6 = pd.read_csv('raw_data/omar_walking_hand_data.csv')
+df_OD1 = pd.read_csv('raw_data/omar_jumping_back_pocket_data.csv', nrows=max_rows)
+df_OD2 = pd.read_csv('raw_data/omar_jumping_front_pocket_data.csv', nrows=max_rows)
+df_OD3 = pd.read_csv('raw_data/omar_jumping_hand_data.csv', nrows=max_rows)
+df_OD4 = pd.read_csv('raw_data/omar_walking_back_pocket_data.csv', nrows=max_rows)
+df_OD5 = pd.read_csv('raw_data/omar_walking_front_pocket_data.csv', nrows=max_rows)
+df_OD6 = pd.read_csv('raw_data/omar_walking_hand_data.csv', nrows=max_rows)
 
 # Ian's Files:
-df_ID1 = pd.read_csv('raw_data/Ian_left_back_walk.csv')
-df_ID2 = pd.read_csv('raw_data/Ian_left_front_walk.csv')
-df_ID3 = pd.read_csv('raw_data/Ian_right_back_walk.csv')
-df_ID4 = pd.read_csv('raw_data/Ian_right_front_walk.csv')
-df_ID5 = pd.read_csv('raw_data/Ian_back_jump.csv')
-df_ID6 = pd.read_csv('raw_data/Ian_front_jump.csv')
+df_ID1 = pd.read_csv('raw_data/Ian_left_back_walk.csv', nrows=max_rows)
+df_ID2 = pd.read_csv('raw_data/Ian_left_front_walk.csv', nrows=max_rows)
+df_ID3 = pd.read_csv('raw_data/Ian_right_back_walk.csv', nrows=max_rows)
+df_ID4 = pd.read_csv('raw_data/Ian_right_front_walk.csv', nrows=max_rows)
+df_ID5 = pd.read_csv('raw_data/Ian_back_jump.csv', nrows=max_rows)
+df_ID6 = pd.read_csv('raw_data/Ian_front_jump.csv', nrows=max_rows)
 
 # Combine Data Sets
 walk_df = [df_JD4, df_JD5, df_JD6,
@@ -67,14 +69,26 @@ jump_df['label'] = 1
 raw_df = [walk_df, jump_df]
 raw_data = pd.concat(raw_df)
 # HOW DO I SHUFFLE LOL--------------------------------------------------------------------------
-shuffled_data = raw_data
+# shuffled_data = raw_data
 
 # group the dataframe into groups of 100 rows each
-groups = raw_data.groupby(raw_data.index // 2000)
-print(groups)
+# groups = raw_data.groupby(raw_data.index // 2000)
+# print(groups)
 
 # shuffle the rows within each group using the sample() method
-shuffled_df = groups.apply(lambda x: x.sample(frac=1)).reset_index(drop=True)
+# shuffled_df = groups.apply(lambda x: x.sample(frac=1)).reset_index(drop=True)
+shuffled_data = np.array_split(raw_data, len(raw_data) // 500)
+
+# # Print the first 5 rows of each smaller dataframe
+# for i in range(len(shuffled_data)):
+#     print("shuffled window", i+1)
+#     print(shuffled_data[i].head())
+
+np.random.shuffle(shuffled_data)
+
+for i in range(len(shuffled_data)):
+    print("shuffled window", i+1)
+    print(shuffled_data[i])
 
 # display the shuffled dataframe
 # print(walk_df)
@@ -91,7 +105,7 @@ train_data, test_data = train_test_split(shuffled_data, test_size=0.1, random_st
 
 # Create the HDF5 File and start organizing
 # Write to the file:
-with h5py.File('./data.h5', 'w') as hdf:
+with h5py.File('output_data/data.h5', 'w') as hdf:
     # Create a group for each team members data
     Jacob_Data = hdf.create_group('/Jacob')
     Omar_Data = hdf.create_group('/Omar')
