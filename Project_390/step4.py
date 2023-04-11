@@ -7,9 +7,12 @@ from sklearn import preprocessing
 train = pd.read_csv('input_data/train.csv')
 # train.plot()
 
+#NORMALIZE
+
 # DECLARE WINDOW SIZE
 window_size = 31
 filtered_train = train.rolling(window_size, center=True).mean()
+
 
 # filtered_train.plot()
 # plt.show()
