@@ -63,56 +63,6 @@ jump_df = [df_JD1, df_JD2, df_JD3,
 jump_df = pd.concat(jump_df)
 jump_df['label'] = 1
 
-# Create the HDF5 File and start organizing
-# Write to the file:
-with h5py.File('./data.h5', 'w') as hdf:
-    # Create a group for each team members data
-    Jacob_Data = hdf.create_group('/Jacob_Data_Group')
-    Omar_Data = hdf.create_group('/Omar_Data_Group')
-    Ian_Data = hdf.create_group('/Ian_Data_Group')
-
-# Jacob_Data_Group----------------------------------------------------------------------------
-    
-    JD_Jump = hdf.create_group('Jacob_Data_Group/Jacob_Data_Jump')
-    #Add data to JD_Jump Group
-    JD_Jump.create_dataset('J_jump_backP', data=df_JD1.to_numpy())
-    JD_Jump.create_dataset('J_jump_frontP', data=df_JD2.to_numpy())
-    JD_Jump.create_dataset('J_jump_hand', data=df_JD3.to_numpy())
-
-    JD_Walk = hdf.create_group('Jacob_Data_Group/Jacob_Data_Walk')
-    # Add data to JD_Walk Group
-    JD_Walk.create_dataset('J_walk_backP', data=df_JD4.to_numpy())
-    JD_Walk.create_dataset('J_walk_frontP', data=df_JD5.to_numpy())
-    JD_Walk.create_dataset('J_walk_hand', data=df_JD6.to_numpy())
-
-# Omar_Data_Group----------------------------------------------------------------------------
-    
-    OD_Jump = hdf.create_group('Omar_Data_Group/Omar_Data_Jump')
-    #Add data to OD_Jump Group
-    OD_Jump.create_dataset('O_jump_backP', data=df_OD1.to_numpy())
-    OD_Jump.create_dataset('O_jump_frontP', data=df_OD2.to_numpy())
-    OD_Jump.create_dataset('O_jump_hand', data=df_OD3.to_numpy())
-
-    OD_Walk = hdf.create_group('Omar_Data_Group/Omar_Data_Walk')
-    # Add data to OD_Walk Group
-    OD_Walk.create_dataset('O_walk_backP', data=df_OD4.to_numpy())
-    OD_Walk.create_dataset('O_walk_frontP', data=df_OD5.to_numpy())
-    OD_Walk.create_dataset('O_walk_hand', data=df_OD6.to_numpy())
-
-# Ian_Data_Group----------------------------------------------------------------------------
-    
-    ID_Jump = hdf.create_group('Ian_Data_Group/Ian_Data_Jump')
-    # #Add data to OD_Jump Group
-    ID_Jump.create_dataset('I_jump_backP', data=df_ID5.to_numpy())
-    ID_Jump.create_dataset('I_jump_frontP', data=df_ID6.to_numpy())
-    #
-    ID_Walk = hdf.create_group('Ian_Data_Group/Ian_Data_Walk')
-    # # Add data to OD_Walk Group
-    ID_Walk.create_dataset('I_walk_backLP', data=df_ID1.to_numpy())
-    ID_Walk.create_dataset('I_walk_frontLP', data=df_ID2.to_numpy())
-    ID_Walk.create_dataset('I_walk_backRP', data=df_ID3.to_numpy())
-    ID_Walk.create_dataset('I_walk_frontRP', data=df_ID4.to_numpy())
-
 # Combine Both Datasets & Shuffle
 raw_df = [walk_df, jump_df]
 raw_data = pd.concat(raw_df)
@@ -138,25 +88,61 @@ print(raw_data)
 # Split data into training and testing sets, with 90% of the data used for training and 10% used for testing
 train_data, test_data = train_test_split(shuffled_data, test_size=0.1, random_state=42)
 
-# For reference of training and test data being 90% and 10% respectfully
-print(walk_df.shape)
-print(jump_df.shape)
-print("These should be the same")
-print(raw_data.shape)
-print(shuffled_data.shape)
-print("These should be the relative to their percentage")
-print("90%: ")
-print(train_data.shape)
-print("10%: ")
-print(test_data.shape)
-
-# Create groups for Train and Test data within a dataset group
+# Create the HDF5 File and start organizing
+# Write to the file:
 with h5py.File('./data.h5', 'w') as hdf:
-    train_dataset = hdf.create_group('/Train_Dataset_Group')
-    test_dataset = hdf.create_group('/Test_Dataset_Group')
+    # Create a group for each team members data
+    Jacob_Data = hdf.create_group('/Jacob')
+    Omar_Data = hdf.create_group('/Omar')
+    Ian_Data = hdf.create_group('/Ian')
+    main = hdf.create_group('/dataset')
+    train = hdf.create_group('/dataset/training')
+    test = hdf.create_group('/dataset/testing')
 
     #Add data to Train_Dataset_Group
-    train_dataset.create_dataset('Train_Data', data=train_data)
+    train.create_dataset('Train_Data', data=train_data)
 
     # Add data to Test_Dataset_Group
-    test_dataset.create_dataset('Test_Data', data=test_data)
+    test.create_dataset('Test_Data', data=test_data)
+
+# Jacob_Data_Group----------------------------------------------------------------------------
+    
+    JD_Jump = hdf.create_group('/Jacob/Data_Jump')
+    #Add data to JD_Jump Group
+    JD_Jump.create_dataset('J_jump_backP', data=df_JD1.to_numpy())
+    JD_Jump.create_dataset('J_jump_frontP', data=df_JD2.to_numpy())
+    JD_Jump.create_dataset('J_jump_hand', data=df_JD3.to_numpy())
+
+    JD_Walk = hdf.create_group('/Jacob/Data_Walk')
+    # Add data to JD_Walk Group
+    JD_Walk.create_dataset('J_walk_backP', data=df_JD4.to_numpy())
+    JD_Walk.create_dataset('J_walk_frontP', data=df_JD5.to_numpy())
+    JD_Walk.create_dataset('J_walk_hand', data=df_JD6.to_numpy())
+
+# Omar_Data_Group----------------------------------------------------------------------------
+    
+    OD_Jump = hdf.create_group('/Omar/Data_Jump')
+    #Add data to OD_Jump Group
+    OD_Jump.create_dataset('O_jump_backP', data=df_OD1.to_numpy())
+    OD_Jump.create_dataset('O_jump_frontP', data=df_OD2.to_numpy())
+    OD_Jump.create_dataset('O_jump_hand', data=df_OD3.to_numpy())
+
+    OD_Walk = hdf.create_group('/Omar/Data_Walk')
+    # Add data to OD_Walk Group
+    OD_Walk.create_dataset('O_walk_backP', data=df_OD4.to_numpy())
+    OD_Walk.create_dataset('O_walk_frontP', data=df_OD5.to_numpy())
+    OD_Walk.create_dataset('O_walk_hand', data=df_OD6.to_numpy())
+
+# Ian_Data_Group----------------------------------------------------------------------------
+    
+    ID_Jump = hdf.create_group('/Ian/Data_Jump')
+    # #Add data to OD_Jump Group
+    ID_Jump.create_dataset('I_jump_backP', data=df_ID5.to_numpy())
+    ID_Jump.create_dataset('I_jump_frontP', data=df_ID6.to_numpy())
+    #
+    ID_Walk = hdf.create_group('/Ian/Data_Walk')
+    # # Add data to OD_Walk Group
+    ID_Walk.create_dataset('I_walk_backLP', data=df_ID1.to_numpy())
+    ID_Walk.create_dataset('I_walk_frontLP', data=df_ID2.to_numpy())
+    ID_Walk.create_dataset('I_walk_backRP', data=df_ID3.to_numpy())
+    ID_Walk.create_dataset('I_walk_frontRP', data=df_ID4.to_numpy())
