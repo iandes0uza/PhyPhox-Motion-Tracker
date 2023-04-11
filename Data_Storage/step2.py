@@ -125,10 +125,10 @@ train_data, test_data = train_test_split(shuffled_data, test_size=0.1, random_st
 # For reference of training and test data being 90% and 10% respectfully
 print(walk_df.shape)
 print(jump_df.shape)
-print("These should be the same\n")
+print("These should be the same")
 print(raw_data.shape)
 print(shuffled_data.shape)
-print("These should be the relative to their percentage\n")
+print("These should be the relative to their percentage")
 print("90%: ")
 print(train_data.shape)
 print("10%: ")
