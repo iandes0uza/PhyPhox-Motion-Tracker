@@ -102,6 +102,10 @@ for i in range(len(shuffled_data)):
 
 # Split data into training and testing sets, with 90% of the data used for training and 10% used for testing
 train_data, test_data = train_test_split(shuffled_data, test_size=0.1, random_state=42)
+train_label = train_data.iloc[:, 4]
+test_label = test_data.iloc[:, 4] 
+train_data = train_data.iloc[:, :4]
+test_data = test_data.iloc[:, :4]
 
 # Create the HDF5 File and start organizing
 # Write to the file:
@@ -116,11 +120,11 @@ with h5py.File('output_data/data.h5', 'w') as hdf:
 
     #Add data to Train_Dataset_Group
     train.create_dataset('Train_Data', data=train_data)
-    train_data.to_csv('train.csv', index=False)
+    train.create_dataset('Train_Label', data=train_label)
 
     # Add data to Test_Dataset_Group
     test.create_dataset('Test_Data', data=test_data)
-    test_data.to_csv('test.csv', index=False)
+    test.create_dataset('Test_Label', data=test_label)
 
 # Jacob_Data_Group----------------------------------------------------------------------------
     
