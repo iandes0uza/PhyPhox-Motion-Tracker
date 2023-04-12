@@ -102,6 +102,8 @@ for i in range(len(shuffled_data)):
 
 # Split data into training and testing sets, with 90% of the data used for training and 10% used for testing
 train_data, test_data = train_test_split(shuffled_data, test_size=0.1, random_state=42)
+train_data = pd.DataFrame(train_data)
+test_data = pd.DataFrame(test_data)
 train_label = train_data.iloc[:, 4]
 test_label = test_data.iloc[:, 4] 
 train_data = train_data.iloc[:, :4]
