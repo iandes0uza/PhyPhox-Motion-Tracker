@@ -7,34 +7,41 @@ from sklearn.metrics import accuracy_score
 from sklearn.pipeline import make_pipeline
 from sklearn.linear_model import LogisticRegression
 from sklearn.inspection import DecisionBoundaryDisplay
-from sklearn.decomposition import PCA
-from sklearn.tree import DecisionTreeClassifier
-
-# # Open the HDF5 file
-# with h5py.File('input_data/data.hdf5', 'r') as file:
-    
-#     # Get the dataset you want to read
-#     train = file['/dataset/training/Train_Data']
-#     test = file['/dataset/testing/Test_Data']
-    
-#     # Convert the dataset to a numpy array
-#     # np_array = dataset[()]
-    
-#     # Convert the numpy array to a pandas DataFrame
-#     # df = pd.DataFrame(np_array)
+from sklearn.metrics import roc_auc_score
+from sklearn.metrics import roc_curve
+from sklearn.metrics import RocCurveDisplay
+from sklearn.metrics import confusion_matrix
+from sklearn.metrics import ConfusionMatrixDisplay
+from sklearn.metrics import recall_score
 
 # INPUT DATA
-training_data = pd.read_csv('input_data/train.csv')
-testing_data = pd.read_csv('input_data/test.csv')
+train_df = h5py.File('./HDF5/data.h5', 'r')['dataset/training/Train_Features']
+test_df = h5py.File('./HDF5/data.h5', 'r')['dataset/testing/Test_Features']
 
-clf = DecisionTreeClassifier()
+data = pd.DataFrame(train_df)
+train_labels = data.iloc[:, -1]
+train_data = data.iloc[:, 0:-1]
+data = pd.DataFrame(test_df)
+test_labels = data.iloc[:, -1]
+test_data = data.iloc[:, 0:-1]
 
-# train the classifier on the training data
-clf.fit(X_train, y_train)
+scaler = StandardScaler()
+l_reg = LogisticRegression(max_iter=10000)
+clf = make_pipeline(StandardScaler(), l_reg)
 
-# predict the class labels of the test data
-y_pred = clf.predict(X_test)
 
-# evaluate the performance of the classifier
-accuracy = accuracy_score(y_test, y_pred)
+# # train the classifier on the training data
+clf.fit(train_data, train_labels)
+
+label_pred = clf.predict(test_data)
+label_clf_prob = clf.predict_proba(test_data)
+
+print(label_pred)
+print(label_clf_prob)
+
+# # predict the class labels of the test data
+# y_pred = clf.predict(X_test)
+
+# # evaluate the performance of the classifier
+accuracy = accuracy_score(test_labels, label_pred)
 print('Accuracy:', accuracy)
