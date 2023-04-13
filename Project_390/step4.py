@@ -31,10 +31,3 @@ with h5py.File('./output_data/data.h5', 'r+') as f:
         processed_df[i] = result
 
 
-
-    # train_df.plot()
-    # plt.show()
-
-    # OUTPUT DATA SET
-    # filtered_train.to_csv('output_data/train_filtered.csv', index=False)
-

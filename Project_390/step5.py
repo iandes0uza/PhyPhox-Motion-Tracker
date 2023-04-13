@@ -9,23 +9,27 @@ window_size = 500
 df_train = h5py.File('./output_data/data.h5', 'r+')['dataset/training/Processed_Data']
 with h5py.File('./output_data/data.h5', 'r+') as f:
 
+    feature_list = []
+
     for i in range(len(df_train)):
         data = pd.DataFrame(df_train[i])
-        feature_data = data
-        features = pd.DataFrame(columns=['max', 'min', 'mean', 'median', 'var', 'skew', 'std', 'kurt'])
+        data = data.iloc[:, 1:-1]
+        features = pd.DataFrame(columns=['max', 'min', 'mean', 'median', 'var', 'skew', 'std', 'kurt'], dtype=float)
         # print(feature_data)
-        features['max'] = feature_data.iloc[1:,1].rolling(window=window_size).max()
-        features['min'] = feature_data.iloc[1:,1].rolling(window=window_size).min()
-        features['mean'] = feature_data.iloc[1:,1].rolling(window=window_size).mean()
-        features['median'] = feature_data.iloc[1:,1].rolling(window=window_size).median()
-        features['var'] = feature_data.iloc[1:,1].rolling(window=window_size).var()
-        features['skew'] = feature_data.iloc[1:,1].rolling(window=window_size).skew()
-        features['std'] = feature_data.iloc[1:,1].rolling(window=window_size).std()
-        features['kurt'] = feature_data.iloc[1:,1].rolling(window=window_size).kurt()
-        features.dropna()
+        features['max'] = data.max()
+        features['min'] = data.min()
+        features['mean'] = data.mean()
+        features['median'] = data.median()
+        features['var'] = data.var()
+        features['skew'] = data.skew()
+        features['std'] = data.std()
+        features['kurt'] = data.kurt()
+        feature_list.append(features)
+        # features = [max_val, min_val, mean_val, median_val, var_val, skew_val, std_val, kurt_val]
+        # features_df = pd.concat(features)
         # features = pd.DataFrame(columns=['mean', 'std', 'min', 'max', 'skew'])
         # window_size = 31
-        print(features)
+        # print(features)
         # features['mean'] = feature_data[:, 0].rolling(window = window_size).mean()
         # # features['std'] = feature_data[:, 0].rolling(window = window_size).std()
         # # features['min'] = feature_data[:, 0].rolling(window = window_size).min()
@@ -35,8 +39,7 @@ with h5py.File('./output_data/data.h5', 'r+') as f:
         # print(feature_data)
 
         # # train_df = f['dataset/training/Train_Data']
-        # f.create_dataset('dataset/training/Processed_Data', data=features)
-
+    f.create_dataset('dataset/training/Train_Features', data=feature_list)
 # features = trained_data.agg(['min', 'max', 'mean', 'median', 'var', 'skew', 'std'])
 # features.columns = ['_'.join(col).strip() for col in features.columns.values]
 
