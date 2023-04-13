@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import h5py
 
-with h5py.File('output_data/data.h5', 'r') as hdf:
+with h5py.File('HDF5/data.h5', 'r') as hdf:
     comb_data = hdf['combined_data/combined_raw_data'][()]
     walk_comb_data = hdf['combined_data/combined_walk_data'][()]
     jump_comb_data = hdf['combined_data/combined_jump_data'][()]

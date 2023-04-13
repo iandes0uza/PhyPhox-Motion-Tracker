@@ -105,7 +105,7 @@ train_data, test_data = train_test_split(shuffled_data, test_size=0.1, random_st
 
 # Create the HDF5 File and start organizing
 # Write to the file:
-with h5py.File('output_data/data.h5', 'w') as hdf:
+with h5py.File('HDF5/data.h5', 'w') as hdf:
     # Create a group for each team members data
     Jacob_Data = hdf.create_group('/Jacob')
     Omar_Data = hdf.create_group('/Omar')

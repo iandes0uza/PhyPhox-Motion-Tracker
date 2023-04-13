@@ -6,8 +6,8 @@ from sklearn import preprocessing
 
 # INPUT DATA SET
 # with h5py.File('output_data/data.h5', 'r') as hdf:
-train_df = h5py.File('./output_data/data.h5', 'r+')['dataset/training/Train_Data']
-with h5py.File('./output_data/data.h5', 'r+') as f:
+train_df = h5py.File('./HDF5/data.h5', 'r+')['dataset/training/Train_Data']
+with h5py.File('./HDF5/data.h5', 'r+') as f:
     # # Open the source and destination datasets
     # train_df = f['dataset/training/Train_Data']
     processed_df = f.create_dataset('dataset/training/Processed_Data', data=train_df)
