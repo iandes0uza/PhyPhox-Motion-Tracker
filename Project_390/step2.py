@@ -114,6 +114,7 @@ with h5py.File('output_data/data.h5', 'w') as hdf:
     train = hdf.create_group('/dataset/training')
     test = hdf.create_group('/dataset/testing')
 
+
     #Add data to Train_Dataset_Group
     train.create_dataset('Train_Data', data=train_data)
     # train.create_dataset('Train_Label', data=train_label)
@@ -163,3 +164,11 @@ with h5py.File('output_data/data.h5', 'w') as hdf:
     ID_Walk.create_dataset('I_walk_frontLP', data=df_ID2.to_numpy())
     ID_Walk.create_dataset('I_walk_backRP', data=df_ID3.to_numpy())
     ID_Walk.create_dataset('I_walk_frontRP', data=df_ID4.to_numpy())
+
+# Combined Data----------------------------------------------------------------------------
+    comb = hdf.create_group('/combined_data')
+    # #Add data to Combined Data Group
+    comb.create_dataset('combined_raw_data', data=raw_data.to_numpy())
+    comb.create_dataset('combined_walk_data', data=walk_df.to_numpy())
+    comb.create_dataset('combined_jump_data', data=jump_df.to_numpy())
+
