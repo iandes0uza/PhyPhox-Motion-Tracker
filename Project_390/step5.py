@@ -4,27 +4,38 @@ import pandas as pd
 import h5py
 from sklearn import preprocessing
 
-
+window_size = 500
 # #INPUT DATA USING HDF5 (maybe use different sets?)
-processed_df = h5py.File('./output_data/data.h5', 'r+')['dataset/training/Processed_Data']
+df_train = h5py.File('./output_data/data.h5', 'r+')['dataset/training/Processed_Data']
 with h5py.File('./output_data/data.h5', 'r+') as f:
-    # # Open the source and destination datasets
 
-    for i in range(len(processed_df)):
-        data = pd.DataFrame(processed_df[i])
-        feature_data = data.iloc[:, 0:-1]
-        features = pd.DataFrame(columns=['mean', 'std', 'min', 'max', 'skew'])
-        window_size = 31
-        features['mean'] = feature_data.rolling(window = window_size).mean()
-        # features['std'] = data.iloc[:, 1:-1].rolling(window = window_size).std()
-        # features['min'] = data.iloc[:, 1:-1].rolling(window = window_size).min()
-        # features['max'] = data.iloc[:, 1:-1].rolling(window = window_size).max()
-        # features['skew'] = data.iloc[:, 1:-1].rolling(window = window_size).skew()
+    for i in range(len(df_train)):
+        data = pd.DataFrame(df_train[i])
+        feature_data = data
+        features = pd.DataFrame(columns=['max', 'min', 'mean', 'median', 'var', 'skew', 'std', 'kurt'])
+        # print(feature_data)
+        features['max'] = feature_data.iloc[1:,1].rolling(window=window_size).max()
+        features['min'] = feature_data.iloc[1:,1].rolling(window=window_size).min()
+        features['mean'] = feature_data.iloc[1:,1].rolling(window=window_size).mean()
+        features['median'] = feature_data.iloc[1:,1].rolling(window=window_size).median()
+        features['var'] = feature_data.iloc[1:,1].rolling(window=window_size).var()
+        features['skew'] = feature_data.iloc[1:,1].rolling(window=window_size).skew()
+        features['std'] = feature_data.iloc[1:,1].rolling(window=window_size).std()
+        features['kurt'] = feature_data.iloc[1:,1].rolling(window=window_size).kurt()
+        features.dropna()
+        # features = pd.DataFrame(columns=['mean', 'std', 'min', 'max', 'skew'])
+        # window_size = 31
         print(features)
+        # features['mean'] = feature_data[:, 0].rolling(window = window_size).mean()
+        # # features['std'] = feature_data[:, 0].rolling(window = window_size).std()
+        # # features['min'] = feature_data[:, 0].rolling(window = window_size).min()
+        # # features['max'] = feature_data[:, 0].rolling(window = window_size).max()
+        # # features['skew'] = feature_data[:, 0].rolling(window = window_size).skew()
 
+        # print(feature_data)
 
-    # train_df = f['dataset/training/Train_Data']
-    f.create_dataset('dataset/training/Processed_Data', data=features)
+        # # train_df = f['dataset/training/Train_Data']
+        # f.create_dataset('dataset/training/Processed_Data', data=features)
 
 # features = trained_data.agg(['min', 'max', 'mean', 'median', 'var', 'skew', 'std'])
 # features.columns = ['_'.join(col).strip() for col in features.columns.values]
