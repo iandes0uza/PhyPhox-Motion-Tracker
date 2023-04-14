@@ -18,7 +18,7 @@ label.pack(pady=20)
 sublabel = tk.Label(root, text="Group 47", font=("Helvetica", 18), fg="#666", bg="#eee")
 sublabel.pack()
 # Create a sublabel widget
-sublabel1 = tk.Label(root, text="Omar Barakat – 20199519 – 19oksb@queensu.ca\n Ian Desouza – {Insert Student #} – 20iagd@queensu.ca \n Jacob O’Neil – 20221893 – 19jmon1@queensu.ca \n ", font=("Helvetica", 12), fg="#666", bg="#eee")
+sublabel1 = tk.Label(root, text="Omar Barakat – 20199519 – 19oksb@queensu.ca\n Ian Desouza – 20232372 – 20iagd@queensu.ca \n Jacob O’Neil – 20221893 – 19jmon1@queensu.ca \n ", font=("Helvetica", 12), fg="#666", bg="#eee")
 sublabel1.pack()
 
 def runGUI():
