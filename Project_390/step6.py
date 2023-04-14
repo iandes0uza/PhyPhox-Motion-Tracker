@@ -47,7 +47,7 @@ print(label_clf_prob)
 accuracy = accuracy_score(test_labels, label_pred)
 print('Accuracy:', accuracy)
 
-filename = 'trained_model.sav'
-file = open(filename, 'wb')
-pickle.dump(clf, file)
-file.close()
+# filename = 'trained_model.sav'
+# file = open(filename, 'wb')
+# pickle.dump(clf, file)
+# file.close()
