@@ -1,5 +1,6 @@
 import pandas as pd
 import h5py
+import pickle
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
@@ -45,3 +46,8 @@ print(label_clf_prob)
 # # evaluate the performance of the classifier
 accuracy = accuracy_score(test_labels, label_pred)
 print('Accuracy:', accuracy)
+
+filename = 'trained_model.sav'
+file = open(filename, 'wb')
+pickle.dump(clf, file)
+file.close()
