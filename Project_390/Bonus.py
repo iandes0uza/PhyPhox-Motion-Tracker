@@ -4,6 +4,7 @@ import csv
 import time
 import os
 
+
 # set up the webdriver
 driver = webdriver.Chrome("C:/Users/jmowo/Downloads/chromedriver_win32/chromedriver")
 
@@ -11,6 +12,10 @@ driver = webdriver.Chrome("C:/Users/jmowo/Downloads/chromedriver_win32/chromedri
 # URL for Queensu-Secure
 url = "http://10.216.7.209"
 driver.get(url)
+
+
+# clear the file contents
+open('accelerations.csv', 'w').close()
 
 with open('accelerations.csv', mode='a', newline='') as file:
     writer = csv.writer(file)
