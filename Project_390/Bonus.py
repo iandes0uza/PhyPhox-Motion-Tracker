@@ -12,6 +12,14 @@ driver = webdriver.Chrome("C:/Users/jmowo/Downloads/chromedriver_win32/chromedri
 url = "http://10.216.7.209"
 driver.get(url)
 
+with open('accelerations.csv', mode='a', newline='') as file:
+    writer = csv.writer(file)
+    writer.writerow(
+        ['Time (s)', 'Linear Acceleration x (m/s^2)', 'Linear Acceleration y (m/s^2)',
+         'Linear Acceleration z (m/s^2)',
+         'Absolute acceleration (m/s^2)'])
+
+
 # set start time
 start_time = time.time()
 
@@ -34,31 +42,43 @@ while True:
     # extract the valueNumber elements
     value_numbers = [span.text for span in soup.find_all("span", class_="valueNumber")]
 
-    # check if the current values are different from the previous values
-    if value_numbers != prev_value_numbers:
-        # calculate elapsed time
-        elapsed_time = time.time() - start_time
+    # check if there are at least three elements in the value_numbers list
+    if len(value_numbers) >= 3:
 
-        # check if there are valid acceleration values
-        if any(value_numbers[1:]):
-            # set the flag to indicate that there are valid acceleration values
-            valid_acceleration = True
+        # check if the current values are different from the previous values
+        if value_numbers != prev_value_numbers:
+            # calculate elapsed time
+            elapsed_time = time.time() - start_time
 
-            # write the valueNumber elements and elapsed time to a CSV file
-            with open('accelerations.csv', mode='a', newline='') as file:
-                writer = csv.writer(file)
-                writer.writerow([elapsed_time] + value_numbers)
+            # check if there are valid acceleration values
+            if any(value_numbers[1:]):
+                # set the flag to indicate that there are valid acceleration values
+                valid_acceleration = True
 
-        # check if the flag is set and if there are no valid acceleration values
-        if valid_acceleration and not any(value_numbers[1:]):
-            # remove the last line from the CSV file
-            os.system("sed -i '$d' accelerations.csv")
+                # calculate absolute acceleration
+                x_accel = float(value_numbers[0])
+                y_accel = float(value_numbers[1])
+                z_accel = float(value_numbers[2])
+                abs_accel = round(((x_accel**2) + (y_accel**2) + (z_accel**2))**(0.5), 2)
 
-            # reset the flag
-            valid_acceleration = False
+                # add absolute acceleration to value_numbers list
+                value_numbers.append(str(abs_accel))
 
-        # set current values as previous values for next iteration
-        prev_value_numbers = value_numbers
+                # write the valueNumber elements and elapsed time to a CSV file
+                with open('accelerations.csv', mode='a', newline='') as file:
+                    writer = csv.writer(file)
+                    writer.writerow([elapsed_time] + value_numbers)
+
+            # check if the flag is set and if there are no valid acceleration values
+            if valid_acceleration and not any(value_numbers[1:]):
+                # remove the last line from the CSV file
+                os.system("sed -i '$d' accelerations.csv")
+
+                # reset the flag
+                valid_acceleration = False
+
+            # set current values as previous values for next iteration
+            prev_value_numbers = value_numbers
 
     time.sleep(0.01)
 
