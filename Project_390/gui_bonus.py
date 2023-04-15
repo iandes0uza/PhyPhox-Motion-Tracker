@@ -7,7 +7,6 @@ from gui_backend import gui_execute
 
 # Create the main window
 root = tk.Tk()
-filepath = filedialog.askopenfilename(filetypes=[('CSV Files', '*.csv')])
 root.title("My GUI")
 root.geometry("1700x1900")  # Set window size
 
